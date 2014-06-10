@@ -13,10 +13,12 @@ Sidekiq Batch provides a simple approach to managing batches of jobs in Sidekiq 
 
 * Uses Redis to maintain state - no database required
 * Supports a callback on batch completion (See Batch Completion below regarding Failed job handling)
+* Does NOT require Rails - only Sidekiq and Redis are required
 
 ## Batch Completion
 
-A batch is considered complete when all jobs have been run at least once.  Failed jobs will be considered complete even if retry is enabled.
+A batch is considered complete when all jobs have been run at least once.  Failed jobs will be considered complete even if retry is enabled.  This is to ensure a batch will end in a timely manner
+since retries could span for many days.
 
 ## Installation
 
@@ -37,9 +39,9 @@ end
   SidekiqBatch.new('MyBatch', batch_options, sidekiq_options) do |batch|
     # Add jobs via a Class, method name and optional arguments
     batch.add(MyClass, :my_method, arg1, arg2, ..., argn)
-    batch.add(MyClass, :my_method, arg1, arg2, ..., argn)
-    
-    batch.callback = Proc.new do |batch_result|
+    ...
+
+    batch.on_complete = Proc.new do |batch_result|
       puts "Batch completed - name: #{batch_result.name}, succeeded: #{batch_result.succeeded}, failed: #{batch_result.failed}"
     end
   end
@@ -48,3 +50,7 @@ end
 ## TODO
 
 * Store batch job stats
+
+## Author
+
+Tom Davies [@atomgiant](https://twitter.com/atomgiant)
