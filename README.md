@@ -1,4 +1,34 @@
-sidekiq-batches
+Sidekiq Batch
 ===============
 
-A simple approach to managing batches in Sidekiq using just Redis for maintaining state
+NOTE: This is currently README-driven development.  Star this project if you are interested and I'll remove this comment when it is ready for consumption.
+
+Sidekiq Batch provides a simple approach to managing batches of jobs in Sidekiq and then processing a callback on completion of all jobs in the batch.  A couple of typical uses might be:
+
+* Crawling web pages on a site as a batch, and then storing all results when the batch completes
+* Processing a group of images to create thumbnails, and then storing the result
+* Parsing a large document in parallel, and then merging the results when all have completed
+
+## Features
+
+* Uses Redis to maintain state - no database required
+* Supports a callback on batch completion (See Batch Completion below regarding Failed job handling)
+
+## Batch Completion
+
+A batch is considered complete when all jobs have been run at least once.  Failed jobs will be considered complete even if retry is enabled.
+
+## Installation
+
+```ruby
+
+```
+
+## Example Usage
+
+```ruby
+```
+
+## TODO
+
+* Store batch job stats
