@@ -20,7 +20,14 @@ A batch is considered complete when all jobs have been run at least once.  Faile
 
 ## Installation
 
+Setup the SidekiqBatch middleware.  See also [Sidekiq's Middleware documentation](https://github.com/mperham/sidekiq/wiki/Middleware).
+
 ```ruby
+Sidekiq.configure_server do |config|
+  config.server_middleware do |chain|
+    chain.add SidekiqBatch::Middleware
+  end
+end
 
 ```
 
