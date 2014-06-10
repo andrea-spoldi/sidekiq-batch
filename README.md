@@ -28,12 +28,21 @@ Sidekiq.configure_server do |config|
     chain.add SidekiqBatch::Middleware
   end
 end
-
 ```
 
 ## Example Usage
 
 ```ruby
+  # Create a new batch and add jobs
+  SidekiqBatch.new('MyBatch', batch_options, sidekiq_options) do |batch|
+    # Add jobs via a Class, method name and optional arguments
+    batch.add(MyClass, :my_method, arg1, arg2, ..., argn)
+    batch.add(MyClass, :my_method, arg1, arg2, ..., argn)
+    
+    batch.callback = Proc.new do |batch_result|
+      puts "Batch completed - name: #{batch_result.name}, succeeded: #{batch_result.succeeded}, failed: #{batch_result.failed}"
+    end
+  end
 ```
 
 ## TODO
